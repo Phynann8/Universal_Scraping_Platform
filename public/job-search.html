@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Search - Universal Scraping API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .results {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .job-card {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .job-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-title {
+            font-size: 1.3rem;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .job-company {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .job-meta span {
+            background: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+        }
+
+        .job-type {
+            background: #28a745 !important;
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .job-source {
+            background: #007bff !important;
+            color: white !important;
+        }
+
+        .job-description {
+            margin-top: 10px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .job-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .job-link:hover {
+            text-decoration: underline;
+        }
+
+        .stats {
+            background: #f0f4ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .stats h3 {
+            color: #667eea;
+            font-size: 2rem;
+        }
+
+        .example-searches {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .example-btn {
+            background: #f0f4ff;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .example-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Job Search</h1>
+            <p>Search for jobs across multiple job boards simultaneously</p>
+        </div>
+
+        <div class="search-card">
+            <h2>🔍 Search Jobs</h2>
+
+            <div class="input-group">
+                <label for="searchType">Search Type:</label>
+                <select id="searchType">
+                    <option value="all">All Job Sites (Indeed, LinkedIn, Glassdoor, etc.)</option>
+                    <option value="remote">Remote Jobs Only</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="keyword">Job Title / Keyword:</label>
+                <input type="text" id="keyword" placeholder="e.g., remote developer, data analyst, designer"
+                    value="remote developer">
+            </div>
+
+            <div class="input-group">
+                <label for="location">Location (optional):</label>
+                <input type="text" id="location" placeholder="e.g., New York, worldwide, remote">
+            </div>
+
+            <button class="btn" onclick="searchJobs()">🚀 Search Jobs</button>
+
+            <div class="example-searches">
+                <button class="example-btn" onclick="setSearch('remote developer', 'all')">Remote Developer</button>
+                <button class="example-btn" onclick="setSearch('data analyst', 'all')">Data Analyst</button>
+                <button class="example-btn" onclick="setSearch('designer', 'remote')">Remote Designer</button>
+                <button class="example-btn" onclick="setSearch('marketing manager', 'all')">Marketing Manager</button>
+            </div>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        function setSearch(keyword, type) {
+            document.getElementById('keyword').value = keyword;
+            document.getElementById('searchType').value = type;
+        }
+
+        async function searchJobs() {
+            const keyword = document.getElementById('keyword').value;
+            const location = document.getElementById('location').value;
+            const searchType = document.getElementById('searchType').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!keyword) {
+                alert('Please enter a job keyword');
+                return;
+            }
+
+            // Show loading
+            resultsDiv.innerHTML = `
+                <div class="results">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>Searching multiple job sites...</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">This may take 10-30 seconds</p>
+                    </div>
+                </div>
+            `;
+
+            try {
+                let apiUrl;
+                if (searchType === 'remote') {
+                    apiUrl = `http://localhost:4000/api/jobs/remote?keyword=${encodeURIComponent(keyword)}`;
+                } else {
+                    apiUrl = `http://localhost:4000/api/jobs/search-all?keyword=${encodeURIComponent(keyword)}`;
+                    if (location) {
+                        apiUrl += `&location=${encodeURIComponent(location)}`;
+                    }
+                }
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    displayResults(data.data);
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="results">
+                            <p style="color: #fc8181;">Error: ${data.error || 'Failed to fetch jobs'}</p>
+                        </div>
+                    `;
+                }
+
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="results">
+                        <p style="color: #fc8181;">Error: ${error.message}</p>
+                        <p style="margin-top: 10px;">Make sure the API server is running on port 4000</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayResults(data) {
+            const resultsDiv = document.getElementById('results');
+
+            if (!data.jobs || data.jobs.length === 0) {
+                resultsDiv.innerHTML = `
+                    <div class="results">
+                        <p>No jobs found. Try a different keyword or search type.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="results">
+                    <div class="stats">
+                        <h3>${data.totalJobs} Jobs Found</h3>
+                        <p>Keyword: <strong>${data.keyword}</strong></p>
+                        ${data.searchedSites ? `<p>Searched: ${data.searchedSites.join(', ')}</p>` : ''}
+                    </div>
+            `;
+
+            data.jobs.forEach(job => {
+                html += `
+                    <div class="job-card">
+                        <div class="job-title">${job.title}</div>
+                        <div class="job-company">🏢 ${job.company}</div>
+                        <div class="job-meta">
+                            <span>📍 ${job.location}</span>
+                            <span>💰 ${job.salary}</span>
+                            <span class="job-type">🏷️ ${job.type}</span>
+                            <span class="job-source">🌐 ${job.source}</span>
+                        </div>
+                        <div class="job-description">${job.description}</div>
+                        ${job.link ? `<a href="${job.link}" target="_blank" class="job-link">View Job →</a>` : ''}
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+            resultsDiv.innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

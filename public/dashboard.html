@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal Scraping API Platform - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .category-card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .get {
+            background: #28a745;
+            color: white;
+        }
+
+        .post {
+            background: #007bff;
+            color: white;
+        }
+
+        .test-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .result {
+            background: #2d3748;
+            color: #68d391;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Universal Scraping API Platform</h1>
+            <p>37 Specialized Endpoints Across 9 Categories</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <h3>37</h3>
+                <p>API Endpoints</p>
+            </div>
+            <div class="stat-card">
+                <h3>9</h3>
+                <p>Categories</p>
+            </div>
+            <div class="stat-card">
+                <h3>100</h3>
+                <p>Requests/15min</p>
+            </div>
+            <div class="stat-card">
+                <h3>✅</h3>
+                <p>Status: Online</p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h2>🧪 Test API</h2>
+            <select id="category">
+                <option value="/api/general/scrape">General - Basic Scrape</option>
+                <option value="/api/general/headlines">General - Headlines</option>
+                <option value="/api/general/images">General - Images</option>
+                <option value="/api/general/links">General - Links</option>
+                <option value="/api/ecommerce/product">E-commerce - Product</option>
+                <option value="/api/ecommerce/prices">E-commerce - Prices</option>
+                <option value="/api/social/profile">Social - Profile</option>
+                <option value="/api/news/articles">News - Articles</option>
+                <option value="/api/jobs/listings">Jobs - Listings</option>
+                <option value="/api/realestate/listings">Real Estate - Listings</option>
+                <option value="/api/video/metadata">Video - Metadata</option>
+                <option value="/api/seo/analyze">SEO - Analyze</option>
+                <option value="/api/leads/emails">Leads - Extract Emails</option>
+            </select>
+            <input type="text" id="url" placeholder="Enter URL to scrape" value="https://example.com">
+            <button onclick="testAPI()">🔍 Test API</button>
+            <div id="result"></div>
+        </div>
+
+        <div class="categories">
+            <div class="category-card">
+                <h2>📄 General Scraping</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/general/scrape</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/general/headlines</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/general/images</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/general/links</div>
+                <div class="endpoint"><span class="method post">POST</span>/api/general/custom</div>
+            </div>
+
+            <div class="category-card">
+                <h2>🛒 E-commerce</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/ecommerce/product</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/ecommerce/prices</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/ecommerce/reviews</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/ecommerce/search</div>
+            </div>
+
+            <div class="category-card">
+                <h2>📱 Social Media</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/social/profile</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/social/posts</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/social/hashtags</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/social/followers</div>
+            </div>
+
+            <div class="category-card">
+                <h2>📰 News</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/news/articles</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/news/headlines</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/news/category</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/news/search</div>
+            </div>
+
+            <div class="category-card">
+                <h2>💼 Jobs</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/jobs/listings</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/jobs/details</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/jobs/search</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/jobs/company</div>
+            </div>
+
+            <div class="category-card">
+                <h2>🏠 Real Estate</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/realestate/listings</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/realestate/details</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/realestate/search</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/realestate/prices</div>
+            </div>
+
+            <div class="category-card">
+                <h2>🎥 Video</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/video/metadata</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/video/transcript</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/video/comments</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/video/search</div>
+            </div>
+
+            <div class="category-card">
+                <h2>🔍 SEO Tools</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/seo/analyze</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/seo/keywords</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/seo/backlinks</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/seo/meta</div>
+            </div>
+
+            <div class="category-card">
+                <h2>📧 Lead Generation</h2>
+                <div class="endpoint"><span class="method get">GET</span>/api/leads/emails</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/leads/contacts</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/leads/companies</div>
+                <div class="endpoint"><span class="method get">GET</span>/api/leads/social</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const endpoint = document.getElementById('category').value;
+            const url = document.getElementById('url').value;
+            const resultDiv = document.getElementById('result');
+
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="result">Loading...</div>';
+
+            try {
+                const apiUrl = `http://localhost:4000${endpoint}?url=${encodeURIComponent(url)}`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                resultDiv.innerHTML = `<div class="result"><pre>${JSON.stringify(data, null, 2)}</pre></div>`;
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result" style="color: #fc8181;">Error: ${error.message}\n\nMake sure the API server is running on port 4000</div>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
